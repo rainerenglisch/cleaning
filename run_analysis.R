@@ -33,8 +33,18 @@ activityObservation <- rbind(read.table("./UCI HAR Dataset/train/y_train.txt", s
 # features calculating mean or standard deviation of all observations
 df <- data.frame(subject,activity = activity[activityObservation$code,2], featureObservations[,featureMeanStd])
 
-# write a file with the tidy data set
-#write.table(df,"tidy.txt",row.name=FALSE) 
+# write a file with the first tidy data set
+write.table(df,"tidy1.txt",row.name=FALSE) 
+
+# load library for melt and acast function
 require(reshape2)
 
+# reshape the dataframe to have the feature names as values in column "variable"
+# and the feature values in column "value"
 melted <- melt(df, id.vars = c("subject","activity"))
+
+# calculate the mean of feature values for each combination of subject and activity
+cast <- acast(melted, subject + activity ~ variable, mean)
+
+# write a file with the second tidy data set
+write.table(cast,"tidy2.txt",row.name=FALSE) 
