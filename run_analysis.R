@@ -5,11 +5,6 @@ feature$label <- tolower(feature$label)
 # identify the indeces of all feature labels which contain
 # mean or std
 featureMeanStd <- grep("mean|std",feature$label)
-featureMeanStdLabel <- feature$label[featureMeanStd]
-#newFeatureMeanStdLabel <- featureMeanStdLabel 
-#Jerk of the body on the z axiz
-#newFeatureMeanStdLabel[grep("mean",feature$label)] <- "Mean of"
-#newFeatureMeanStdLabel[grep("std",feature$label)] <- "Standard deviation of"
 
 # load the table of activity codes and labels into memory
 activity <- read.table("./UCI HAR Dataset/activity_labels.txt", sep=" ", col.names=c("code","label"))
@@ -46,5 +41,9 @@ melted <- melt(df, id.vars = c("subject","activity"))
 # calculate the mean of feature values for each combination of subject and activity
 cast <- acast(melted, subject + activity ~ variable, mean)
 
-# write a file with the second tidy data set
-write.table(cast,"tidy2.txt",row.name=FALSE) 
+# ggf. weg damit
+#rownames <- strsplit(row.names(cast),"_")
+#cast <- cbind(rownames[1], rownames[2],cast)
+
+# write a file containing the second tidy data set
+write.table(cast,"tidy2.txt",row.name=TRUE) 
