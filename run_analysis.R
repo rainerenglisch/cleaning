@@ -12,17 +12,17 @@ activity <- read.table("./UCI HAR Dataset/activity_labels.txt", sep=" ", col.nam
 activity$label <- c("Walking","Walking Upstairs","Walking Downstairs","Sitting","Standing","Laying")
 
 # load the subjects corresponding to the observation into memory
-subject <- rbind(read.table("./UCI HAR Dataset/train/subject_train.txt", sep=" ", col.names=c("subject"), nrows=100),
-                 read.table("./UCI HAR Dataset/test/subject_test.txt", sep=" ", col.names=c("subject"), nrows=100))
+subject <- rbind(read.table("./UCI HAR Dataset/train/subject_train.txt", sep=" ", col.names=c("subject")),
+                 read.table("./UCI HAR Dataset/test/subject_test.txt", sep=" ", col.names=c("subject")))
 
 # load all feature values of all observations into memory
 # having the feature names as column names
-featureObservations <- rbind(read.table("./UCI HAR Dataset/train/X_train.txt", header=FALSE, col.names=c(feature$label), nrows=100),
-                             read.table("./UCI HAR Dataset/test/X_test.txt", header=FALSE, col.names=c(feature$label), nrows=100))
+featureObservations <- rbind(read.table("./UCI HAR Dataset/train/X_train.txt", header=FALSE, col.names=c(feature$label)),
+                             read.table("./UCI HAR Dataset/test/X_test.txt", header=FALSE, col.names=c(feature$label)))
 
 # load the activities of all observations into memory
-activityObservation <- rbind(read.table("./UCI HAR Dataset/train/y_train.txt", sep=" ", col.names=c("code"), nrows=100),
-                             read.table("./UCI HAR Dataset/test/y_test.txt", sep=" ", col.names=c("code"), nrows=100))
+activityObservation <- rbind(read.table("./UCI HAR Dataset/train/y_train.txt", sep=" ", col.names=c("code")),
+                             read.table("./UCI HAR Dataset/test/y_test.txt", sep=" ", col.names=c("code")))
 
 # create a dataframe containing all subject, activity label and 
 # features calculating mean or standard deviation of all observations
@@ -37,10 +37,6 @@ melted <- melt(df, id.vars = c("subject","activity"))
 
 # calculate the mean of feature values for each combination of subject and activity
 cast <- acast(melted, subject + activity ~ variable, mean)
-
-# ggf. weg damit
-#rownames <- strsplit(row.names(cast),"_")
-#cast <- cbind(rownames[1], rownames[2],cast)
 
 # write a file containing the second tidy data set
 write.table(cast,"tidy.txt",row.name=TRUE) 
